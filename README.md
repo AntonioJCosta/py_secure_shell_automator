@@ -54,15 +54,13 @@ Whether you're developing a deployment script, automating system administration 
       - [Kernel Version](#kernel-version)
       - [OS Version](#os-version)
     - [Executing Commands with `run_cmd`](#executing-commands-with-run_cmd)
-  
-
 
 ## Installation
 
 You can install PySecureShellAutomator with pip:
 
 ```bash
-pip install pysecureshellautomator
+pip install py_secure_shell_automator
 ```
 
 ## Usage
@@ -91,7 +89,7 @@ for process in processes:
     User: root, PID: 12, CPU: 0.0, MEM: 0.1, Command: /sbin/agetty --keep-baud 115200 38400 9600 ttyS0 vt220
     User: root, PID: 13, CPU: 0.4, MEM: 2.2, Command: /usr/lib/postfix/sbin/master -w
     User: www-data, PID: 14, CPU: 2.0, MEM: 4.0, Command: /usr/sbin/apache2 -k start
-``` 
+```
 
 ## Establishing a Connection
 
@@ -138,8 +136,9 @@ PySecureShellAutomator provides methods for performing various file operations o
 Observation: TO use `sftp` operations, set `sftp=True` when creating the PySecureShellAutomator instance.
 
 Methods that use `sftp`:
-  - copy_file_to_remote
-  - copy_file_from_remote
+
+- copy_file_to_remote
+- copy_file_from_remote
 
 Here is an example of how to create a PySecureShellAutomator instance with `sftp` operations:
 
@@ -302,7 +301,7 @@ The `run_cmd` method returns a `CmdResponse` object, which contains the output o
 Here's an example of how to use the `run_cmd` method:
 
 ```python
-from PySecureShellAutomator import PySecureShellAutomator
+from py_secure_shell_automator import PySecureShellAutomator
 
 # Create a PySecureShellAutomator instance
 ssh = PySecureShellAutomator(host='hostname', username='username', password='password')
@@ -325,3 +324,4 @@ print(output.ext_code)
 print(output.is_successful)
 # True
 ```
+
