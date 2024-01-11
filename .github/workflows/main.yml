@@ -1,0 +1,13 @@
+name: Execution after push
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: workflow in progress
+        run: echo "In progress..."

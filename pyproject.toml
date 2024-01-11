@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "py_secure_shell_automator"
+version = "0.1.0"
+description = "A Comprehensive SSH Management Library in Python"
+authors = ["Antonio Costa <antonio.costa.dev@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+homepage = "https://github.com/AntonioJCosta/py_secure_shell_automator"
+repository = "https://github.com/AntonioJCosta/py_secure_shell_automator"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+paramiko = "^3.4.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
+black = "^21.9b0"
+mypy = "^0.910"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+py_secure_shell_automator = 'py_secure_shell_automator:main'
