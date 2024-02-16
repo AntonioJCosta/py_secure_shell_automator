@@ -1,16 +1,12 @@
 """
 Module to store the output of a command executed on linux and windows machines
 """
-import os
-import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from dataclasses import dataclass
 
 
 @dataclass
 class CmdResponse:
-
     """
     Stores the output of a remote command execution on a linux or windows machine
 

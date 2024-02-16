@@ -1,14 +1,10 @@
 """
 Module containing processes operations for the py_secure_shell_automator module
 """
-import os
-import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from base_ssh import BaseSSH
 from .exceptions import *
-from models import Process
+from ..models import Process
+from ..base_ssh import BaseSSH
 
 
 class SSHProcessOperations(BaseSSH):
@@ -36,6 +32,7 @@ class SSHProcessOperations(BaseSSH):
         cmd_response = self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
+            raise_exception=False,
             err_message=f"Process {process} not found",
         )
 
@@ -70,7 +67,6 @@ class SSHProcessOperations(BaseSSH):
         self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=KillProcessError,
         )
         return None
@@ -90,7 +86,6 @@ class SSHProcessOperations(BaseSSH):
         cmd_response = self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=GetProcessesStatusError,
         )
 

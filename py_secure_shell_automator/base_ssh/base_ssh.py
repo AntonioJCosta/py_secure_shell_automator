@@ -4,23 +4,18 @@ can executes commands on it and returns the output of the command,
 using the paramiko library.
 """
 
-import os
 import shlex
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from dataclasses import dataclass
 from typing import Type
 
 from paramiko import AutoAddPolicy, RSAKey, RejectPolicy, SSHClient
 from .exceptions import *
-from models import CmdResponse
+from ..models import CmdResponse
 
 
 @dataclass
 class BaseSSH:
-
     """
     Connects to a linux remote host by ssh protocol, using the
     paramiko library.
@@ -61,7 +56,7 @@ class BaseSSH:
         if self.sftp:
             self._sftp = self._ssh.open_sftp()
         self._is_sftp_initialized = hasattr(self, "sftp")
-        self._hostname = self.run_cmd("hostname -s").out
+        self._hostname = self.run_cmd("hostname -s", raise_exception=False).out
 
     @property
     def hostname(self) -> str:
@@ -74,7 +69,7 @@ class BaseSSH:
         self,
         cmd: str,
         user: str | None = None,
-        raise_exception: bool = False,
+        raise_exception: bool = True,
         custom_exception: Type[Exception] = CmdError,
         err_message: str | None = None,
         cmd_timeout: float | None = 10,

@@ -1,0 +1,41 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - "*"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      ssh:
+        image: linuxserver/openssh-server
+        env:
+          PASSWORD_ACCESS: "true"
+          USER_NAME: "testuser"
+          USER_PASSWORD: "testpassword"
+        options: --health-cmd "sshd -t" --health-interval 10s --health-timeout 5s --health-retries 5
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+
+      - name: Install dependencies
+        run: poetry install
+
+      - name: Run tests
+        env:
+          PYSECURE_SHELL_AUTOMATOR_HOST: "ssh"
+          PYSECURE_SHELL_AUTOMATOR_USERNAME: "testuser"
+          PYSECURE_SHELL_AUTOMATOR_PORT: "22"
+          PYSECURE_SHELL_AUTOMATOR_PASSWORD: "testpassword"
+        run: poetry run pytest

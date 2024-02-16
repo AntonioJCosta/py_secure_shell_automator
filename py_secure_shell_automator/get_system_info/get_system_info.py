@@ -2,13 +2,8 @@
 Module containing methods to get system information
 """
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from base_ssh import BaseSSH
 from .exceptions import *
+from ..base_ssh import BaseSSH
 
 
 class SSHSystemInfo(BaseSSH):
@@ -30,7 +25,6 @@ class SSHSystemInfo(BaseSSH):
         cmd_response = self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=GetSystemInfoError,
         )
         return cmd_response.out
@@ -49,7 +43,6 @@ class SSHSystemInfo(BaseSSH):
         cmd_response = self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=GetSystemInfoError,
         )
         return cmd_response.out
@@ -68,7 +61,6 @@ class SSHSystemInfo(BaseSSH):
         cmd_response = self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=GetSystemInfoError,
         )
         return cmd_response.out
@@ -87,7 +79,6 @@ class SSHSystemInfo(BaseSSH):
         cmd_response = self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=GetSystemInfoError,
         )
         return cmd_response.out
@@ -106,7 +97,6 @@ class SSHSystemInfo(BaseSSH):
         cmd_response = self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=GetSystemInfoError,
         )
         return cmd_response.out

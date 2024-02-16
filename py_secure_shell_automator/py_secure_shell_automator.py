@@ -14,10 +14,10 @@ Key Features:
 Whether you're a system administrator managing multiple remote servers, a developer working on a distributed system, or a researcher conducting experiments on remote machines, PySecureShellAutomator provides the tools you need to manage your remote systems effectively and efficiently.
 """
 
-from .files_operations.files_operations import SSHFileOperations
-from .get_system_info.get_system_info import SSHSystemInfo
-from .process_operations.processes_operations import SSHProcessOperations
-from .user_operations.user_operations import SSHUserOperations
+from .files_operations import SSHFileOperations
+from .get_system_info import SSHSystemInfo
+from .processes_operations import SSHProcessOperations
+from .user_operations import SSHUserOperations
 
 
 class PySecureShellAutomator(
@@ -31,8 +31,9 @@ class PySecureShellAutomator(
         Example usage:
 
             # Use the PySecureShellAutomator instance to perform operation
-            #
+
     ssh = PySecureShellAutomator("hostname", "username", "password")
+
     processes = ssh.get_all_running_processes()
 
     for process in processes:
