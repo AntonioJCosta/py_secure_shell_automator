@@ -2,13 +2,8 @@
 Module containing methods to manage users
 """
 
-import os
-import sys
-
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from base_ssh import BaseSSH
 from .exceptions import *
+from ..base_ssh import BaseSSH
 
 
 class SSHUserOperations(BaseSSH):
@@ -33,7 +28,6 @@ class SSHUserOperations(BaseSSH):
         self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=create_user_cmd,
-            raise_exception=True,
             custom_exception=UserCreationError,
         )
 
@@ -42,7 +36,6 @@ class SSHUserOperations(BaseSSH):
         self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=set_password_cmd,
-            raise_exception=True,
             custom_exception=UserCreationError,
         )
 
@@ -60,6 +53,5 @@ class SSHUserOperations(BaseSSH):
         self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=delete_user_cmd,
-            raise_exception=True,
             custom_exception=UserDeletionError,
         )

@@ -1,13 +1,32 @@
-name: Execution after push
+name: Publish to PyPI
 
 on:
   push:
-    branches: [main]
+    tags:
+      - "*"
+    branches:
+      - main
 
 jobs:
-  build:
+  build-and-publish:
     runs-on: ubuntu-latest
-
     steps:
-      - name: workflow in progress
-        run: echo "In progress..."
+      - name: Check out code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install Poetry
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+
+      - name: Build and publish
+        env:
+          PYPI_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          PYPI_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: |
+          poetry build
+          poetry publish --username $PYPI_USERNAME --password $PYPI_PASSWORD

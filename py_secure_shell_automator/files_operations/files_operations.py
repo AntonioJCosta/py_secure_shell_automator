@@ -1,14 +1,10 @@
 """
 Module containing files operations for the py_secure_shell_automator module
 """
-import os
-import sys
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-from base_ssh import BaseSSH
 from .exceptions import *
-from models import Directory
+from ..base_ssh import BaseSSH
+from ..models import Directory
 
 
 class SSHFileOperations(BaseSSH):
@@ -60,7 +56,6 @@ class SSHFileOperations(BaseSSH):
         cmd_response = self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=GetFileContentError,
         )
         print(cmd_response.ext_code)
@@ -83,7 +78,6 @@ class SSHFileOperations(BaseSSH):
         self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=FileRemovalError,
         )
         return None
@@ -105,7 +99,6 @@ class SSHFileOperations(BaseSSH):
         self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=DirectoryRemovalError,
         )
         return None
@@ -121,7 +114,6 @@ class SSHFileOperations(BaseSSH):
         self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=DirectoryCreationError,
         )
         return None
@@ -146,7 +138,6 @@ class SSHFileOperations(BaseSSH):
         directories_response = self.run_cmd(
             user="root" if run_as_root else None,
             cmd=directories_command,
-            raise_exception=True,
             custom_exception=ListDirectoryContentError,
         )
 
@@ -156,7 +147,6 @@ class SSHFileOperations(BaseSSH):
             files_response = self.run_cmd(
                 user="root" if run_as_root else None,
                 cmd=files_command,
-                raise_exception=True,
                 custom_exception=ListDirectoryContentError,
             )
             # Get just the file name, not the full path
@@ -185,7 +175,6 @@ class SSHFileOperations(BaseSSH):
         self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=True,
             custom_exception=OwnerChangeError,
         )
         return None
