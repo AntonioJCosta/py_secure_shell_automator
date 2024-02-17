@@ -1,4 +1,11 @@
+[![Downloads](https://pepy.tech/badge/py_secure_shell_automator)](https://pepy.tech/project/py_secure_shell_automator)
+[![PyPI](https://img.shields.io/pypi/v/py_secure_shell_automator.svg)](https://pypi.python.org/pypi/py_secure_shell_automator)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/py_secure_shell_automator.svg)](https://pypi.python.org/pypi/py_secure_shell_automator/)
+[![Build Status](https://travis-ci.org/AntonioJCosta/py_secure_shell_automator.svg?branch=main)](https://travis-ci.org/AntonioJCosta/py_secure_shell_automator)
+
 # PySecureShellAutomator: A Comprehensive SSH Management Library in Python
+
+
 
 PySecureShellAutomator is a robust and versatile Python library that simplifies the process of managing remote Unix hosts via SSH. It's built on top of the powerful Paramiko library, but provides a more user-friendly, high-level interface for executing commands and transferring files over SSH.
 
@@ -15,6 +22,8 @@ Key features of PySecureShellAutomator include:
 - **Exception Handling**: PySecureShellAutomator provides custom exceptions for handling specific types of errors, such as command execution errors and file transfer errors. This allows you to easily catch and handle errors in your code.
 
 Whether you're developing a deployment script, automating system administration tasks, or building a web application that interacts with remote servers, PySecureShellAutomator provides the tools you need to manage remote systems with ease.
+
+**We are always open to new pull requests!**
 
 ## Contents
 
