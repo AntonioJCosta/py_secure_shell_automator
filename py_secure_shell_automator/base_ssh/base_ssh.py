@@ -56,14 +56,13 @@ class BaseSSH:
         if self.sftp:
             self._sftp = self._ssh.open_sftp()
         self._is_sftp_initialized = hasattr(self, "sftp")
-        self._hostname = self.run_cmd("hostname -s", raise_exception=False).out
 
     @property
     def hostname(self) -> str:
         """
         Returns the hostname of the remote host
         """
-        return self._hostname
+        return self.run_cmd("hostname -s").out
 
     def run_cmd(
         self,
