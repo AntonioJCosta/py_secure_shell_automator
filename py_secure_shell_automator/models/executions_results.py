@@ -1,5 +1,5 @@
 """
-Module to store the output of a command executed on linux and windows machines
+Type Models of the package 
 """
 
 from dataclasses import dataclass
@@ -8,12 +8,11 @@ from dataclasses import dataclass
 @dataclass
 class CmdResponse:
     """
-    Stores the output of a remote command execution on a linux or windows machine
+    Command response of a remote command execution in a remote host.
 
     Attributes:
-    ----------
-    ext_code: exit code of the command
-    out: output of the command
+        ext_code (int): The exit code of the command.
+        out (str): The output of the command.
     """
 
     ext_code: int
@@ -22,7 +21,10 @@ class CmdResponse:
     @property
     def is_successful(self) -> bool:
         """
-        Return True if the command was executed successfully, False otherwise
+        Return True if the command was executed successfully, False otherwise.
+
+        Returns:
+            bool: True if the exit code is 0, False otherwise.
         """
         return self.ext_code == 0
 
@@ -30,12 +32,11 @@ class CmdResponse:
 @dataclass
 class Directory:
     """
-    Stores the content of a single directory
+    Content of a directory.
 
     Attributes:
-    ----------
-        dir: the directory path
-        files: lislt of files in the directory
+        dir (str): The directory path.
+        files (list[str]): List of files in the directory.
     """
 
     dir: str
@@ -45,15 +46,14 @@ class Directory:
 @dataclass
 class Process:
     """
-    Stores the information of a process
+    Content of a pprocess.
 
     Attributes:
-    ----------
-        user: user that started the process
-        pid: process id
-        cpu: cpu usage of the process
-        mem: memory usage of the process
-        command: command that started the process
+        user (str): The user that started the process.
+        pid (int): The process ID.
+        cpu (float): The CPU usage of the process.
+        mem (float): The memory usage of the process.
+        command (str): The command that started the process.
     """
 
     user: str

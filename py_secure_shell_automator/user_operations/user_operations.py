@@ -8,7 +8,7 @@ from ..base_ssh import BaseSSH
 
 class SSHUserOperations(BaseSSH):
     """
-    Class containing methods to manage users
+    Class containing methods to manage users on a remote host.
     """
 
     def create_user(
@@ -17,12 +17,17 @@ class SSHUserOperations(BaseSSH):
         """
         Create a new user on the remote host.
 
-        Parameters:
-            username: The username of the new user
-            password: The password of the new user
-            run_as_root: Whether to run the command as root. Default is True.
-        """
+        Args:
+            username (str): The username of the new user.
+            password (str): The password of the new user.
+            run_as_root (bool): Whether to run the command as root. Default is True.
 
+        Raises:
+            UserCreationError: If there is an error creating the user.
+
+        Examples:
+            >>> py_ssh.create_user(username='newuser', password='newpassword')
+        """
         # Create the user
         create_user_cmd = f"useradd -m {username}"
         self.run_cmd(
@@ -39,14 +44,19 @@ class SSHUserOperations(BaseSSH):
             custom_exception=UserCreationError,
         )
 
-        return None
-
     def delete_user(self, username: str, run_as_root: bool = True) -> None:
         """
         Delete a user on the remote host.
 
-        Parameters:
-            username: The username of the user to delete
+        Args:
+            username (str): The username of the user to delete.
+            run_as_root (bool): Whether to run the command as root. Default is True.
+
+        Raises:
+            UserDeletionError: If there is an error deleting the user.
+
+        Examples:
+            >>> py_ssh.delete_user(username='olduser')
         """
         # Delete the user
         delete_user_cmd = f"userdel -r {username}"

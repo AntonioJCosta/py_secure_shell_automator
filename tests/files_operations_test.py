@@ -14,7 +14,7 @@ def ssh_file_ops() -> SSHFileOperations:
     )
 
 
-def test_sftp_not_initialized(ssh: SSHFileOperations):
+def test_sftp_not_initialized(py_ssh: SSHFileOperations):
     """
     The function `test_sftp_not_initialized` takes an instance of `SSHFileOperations`
     and tries to execute a method that requires an SFTP connection to be established.
@@ -26,7 +26,7 @@ def test_sftp_not_initialized(ssh: SSHFileOperations):
     """
 
     with pytest.raises(Exception):
-        ssh.copy_file_to_remote("local_path", "remote_path")
+        py_ssh.copy_file_to_remote("local_path", "remote_path")
 
 
 def test_copy_file_to_remote(ssh_file_ops: SSHFileOperations):

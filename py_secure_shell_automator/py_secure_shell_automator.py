@@ -1,52 +1,43 @@
-"""
-PySecureShellAutomator: A Comprehensive SSH Management Library in Python
-
-PySecureShellAutomator is a robust and versatile Python library that simplifies the process of managing remote Unix hosts via SSH. 
-It's built on top of the powerful Paramiko library, but provides a more user-friendly, high-level interface for executing commands 
-and transferring files over SSH.
-
-Key Features:
-- File Operations: Perform various file operations on the remote host, such as reading, writing, and modifying files.
-- Process Operations: Manage processes on the remote host, including starting, stopping, and monitoring processes.
-- User Operations: Manage user accounts on the remote host, including creating, modifying, and deleting users.
-- System Information Retrieval: Retrieve comprehensive system information from the remote host, such as hardware details, operating system information, and more.
-
-Whether you're a system administrator managing multiple remote servers, a developer working on a distributed system, or a researcher conducting experiments on remote machines, PySecureShellAutomator provides the tools you need to manage your remote systems effectively and efficiently.
-"""
-
 from .files_operations import SSHFileOperations
 from .get_system_info import SSHSystemInfo
 from .processes_operations import SSHProcessOperations
 from .user_operations import SSHUserOperations
 
-
 class PySecureShellAutomator(
     SSHFileOperations, SSHProcessOperations, SSHUserOperations, SSHSystemInfo
 ):
     """
-        PySecureShellAutomator is a robust and versatile Python library that simplifies the process of managing remote Unix hosts via SSH.
+    Connects to a remote host using the SSH protocol, and provides methods to execute commands and transfer files.
 
-        This class provides a high-level interface for executing commands and transferring files over SSH. It includes methods for file operations, process operations, user operations, and system information retrieval.
+    Attributes:
+        host (str): Host to connect to the remote host.
+        username (str): Username to connect to the remote host.
+        password (str, optional): Password to connect to the remote host. Defaults to None.
+        port (int, optional): Port to connect to the remote host. Defaults to 22.
+        pkey (str, optional): Private key to connect to the remote host. Defaults to None.
+        timeout (int, optional): Timeout to connect to the remote host. Defaults to 10.
+        auth_timeout (int, optional): Authentication timeout to connect to the remote host. Defaults to 10.
+        auto_add_policy (bool, optional): Whether to add the host to the known hosts. Defaults to True.
+        sftp (bool, optional): Whether to use the SFTP protocol to connect to the remote host. Defaults to False.
 
-        Example usage:
+    Example:
+            Simple command usage:
+            >>> from py_secure_shell_automator import PySecureShellAutomator
+            >>> py_ssh = PySecureShellAutomator(host='hostname', username='user_name', password='password')
+            >>> cmd_response = py_ssh.run_cmd(cmd='whoami')
+            >>> print(cmd_response.ext_code)  # Output: 0
+            >>> print(cmd_response.out)  # Output: 'user_name'
+            >>> print(cmd_response.is_successful)  # Output: True
 
-            # Use the PySecureShellAutomator instance to perform operation
+            Execute a command as a different user:
+            >>> cmd_response = py_ssh.run_cmd(user='another_user', cmd='whoami')
+            >>> print(cmd_response.out)  # Output: 'another_user'
 
-    ssh = PySecureShellAutomator("hostname", "username", "password")
-
-    processes = ssh.get_all_running_processes()
-
-    for process in processes:
-        print(f"User: {process.user}, PID: {process.pid}, CPU: {process.cpu}, MEM: {process.mem}, Command: {process.command}")
-
-        >>> User: root, PID: 1, CPU: 0.1, MEM: 1.4, Command: /sbin/init
-        User: daemon, PID: 2, CPU: 0.0, MEM: 0.1, Command: /usr/sbin/atd -f
-        User: root, PID: 3, CPU: 0.2, MEM: 0.8, Command: /usr/sbin/cron -f
-        User: root, PID: 4, CPU: 0.5, MEM: 2.6, Command: /usr/sbin/rsyslogd -n
-        User: syslog, PID: 5, CPU: 0.0, MEM: 0.3, Command: /usr/sbin/rsyslogd -n
-        User: root, PID: 10, CPU: 0.3, MEM: 1.4, Command: /sbin/dhclient -1 -v -pf /run/dhclient.eth0.pid -lf /var/lib/dhcp/dhclient.eth0.leases eth0
-        User: root, PID: 11, CPU: 0.0, MEM: 0.1, Command: /sbin/agetty --noclear tty1 linux
-        User: root, PID: 12, CPU: 0.0, MEM: 0.1, Command: /sbin/agetty --keep-baud 115200 38400 9600 ttyS0 vt220
-        User: root, PID: 13, CPU: 0.4, MEM: 2.2, Command: /usr/lib/postfix/sbin/master -w
-        User: www-data, PID: 14, CPU: 2.0, MEM: 4.0, Command: /usr/sbin/apache2 -k start
+            Execute a command as root:
+            >>> cmd_response = py_ssh.run_cmd(user='root', cmd='whoami')
+            >>> print(cmd_response.out)  # Output: 'root'
+        
+    Read more in the
+    [PySecureShellAutomator documentation](https://github.com/AntonioJCosta/py_secure_shell_automator/).
     """
+    

@@ -15,11 +15,19 @@ class SSHSystemInfo(BaseSSH):
         """
         Get the CPU usage of the remote host.
 
-        Parameters:
-            run_as_root: Whether to run the command as root. Default is False.
+        Args:
+            run_as_root (bool): Whether to run the command as root. Default is False.
 
         Returns:
-            CPU usage as a string
+            str: CPU usage.
+
+        Raises:
+            GetSystemInfoError: If there is an error retrieving the CPU usage.
+            
+        Example:
+            >>> cpu_usage = py_ssh.get_cpu_usage()
+            >>> print(cpu_usage)
+            '10.0%'
         """
         cmd = "top -b -n1 | grep 'Cpu(s)' | awk '{printf \"%.2f%%\", $2 + $4}'"
         cmd_response = self.run_cmd(
@@ -33,11 +41,19 @@ class SSHSystemInfo(BaseSSH):
         """
         Get the memory usage of the remote host.
 
-        Parameters:
-            run_as_root: Whether to run the command as root. Default is False.
+        Args:
+            run_as_root (bool): Whether to run the command as root. Default is False.
 
         Returns:
-            Memory usage as a string
+            str: Memory usage.
+
+        Raises:
+            GetSystemInfoError: If there is an error retrieving the memory usage.
+            
+        Example:
+            >>> memory_usage = py_ssh.get_memory_usage()
+            >>> print(memory_usage)
+            '10/20MB (50%)'
         """
         cmd = "free -m | awk 'NR==2{printf \"%s/%sMB (%.2f%%)\", $3,$2,$3*100/$2 }'"
         cmd_response = self.run_cmd(
@@ -51,11 +67,19 @@ class SSHSystemInfo(BaseSSH):
         """
         Get the disk usage of the remote host.
 
-        Parameters:
-            run_as_root: Whether to run the command as root. Default is False.
+        Args:
+            run_as_root (bool): Whether to run the command as root. Default is False.
 
         Returns:
-            Disk usage as a string
+            str: Disk usage.
+
+        Raises:
+            GetSystemInfoError: If there is an error retrieving the disk usage.
+            
+        Example:
+            >>> disk_usage = py_ssh.get_disk_usage()
+            >>> print(disk_usage)
+            '10/20GB (50%)'
         """
         cmd = 'df -h | awk \'$NF=="/"{printf "%d/%dGB (%s)", $3,$2,$5}\''
         cmd_response = self.run_cmd(
@@ -69,11 +93,19 @@ class SSHSystemInfo(BaseSSH):
         """
         Get the kernel version of the remote host.
 
-        Parameters:
-            run_as_root: Whether to run the command as root. Default is False.
+        Args:
+            run_as_root (bool): Whether to run the command as root. Default is False.
 
         Returns:
-            Kernel version as a string
+            str: Kernel version.
+
+        Raises:
+            GetSystemInfoError: If there is an error retrieving the kernel version.
+            
+        Example:
+            >>> kernel_version = py_ssh.get_kernel_version()
+            >>> print(kernel_version)
+            '5.4.0-42-generic'
         """
         cmd = "uname -r"
         cmd_response = self.run_cmd(
@@ -87,11 +119,19 @@ class SSHSystemInfo(BaseSSH):
         """
         Get the operating system version of the remote host.
 
-        Parameters:
-            run_as_root: Whether to run the command as root. Default is False.
+        Args:
+            run_as_root (bool): Whether to run the command as root. Default is False.
 
         Returns:
-            Operating system version as a string
+            str: Operating system version.
+
+        Raises:
+            GetSystemInfoError: If there is an error retrieving the operating system version.
+            
+        Example:
+            >>> os_version = py_ssh.get_os_version()
+            >>> print(os_version)
+            'Arch Linux'
         """
         cmd = "cat /etc/os-release | grep PRETTY_NAME | cut -d '=' -f 2"
         cmd_response = self.run_cmd(
