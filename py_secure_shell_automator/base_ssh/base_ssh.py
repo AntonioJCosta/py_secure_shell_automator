@@ -101,7 +101,11 @@ class BaseSSH:
             Simple command usage:
             >>> cmd_response = py_ssh.run_cmd(cmd='whoami')
             >>> print(cmd_response.ext_code)  # Output: 0
+<<<<<<< HEAD
             >>> print(cmd_response.out)  # Output: 'username'
+=======
+            >>> print(cmd_response.out)  # Output: 'user_name'
+>>>>>>> e50b2b7 (docs: update documentation and remove unused code)
             >>> print(cmd_response.is_successful)  # Output: True
 
             Execute a command as a different user:
@@ -118,20 +122,33 @@ class BaseSSH:
             
             >>> from py_secure_shell_automator.exceptions import CmdError
             >>> try:
+<<<<<<< HEAD
                     cmd_response = py_ssh.run_cmd(cmd='wrong_command')
                 except CmdError as e:
                     print(e)  # Output: 'bash: wrong_command: command not found'
                     # Continue with the error handling
+=======
+            ...     cmd_response = py_ssh.run_cmd(cmd='wrong_command')
+            ... except CmdError as e:
+            ...     print(e)  # Output: 'bash: wrong_command: command not found'
+            ...     # Continue with the error handling
+>>>>>>> e50b2b7 (docs: update documentation and remove unused code)
 
             2. Using raise_exception=False:
             >>> cmd_response = py_ssh.run_cmd(cmd='wrong_command', raise_exception=False)
             >>> if not cmd_response.is_success:
+<<<<<<< HEAD
                     print(cmd_response.out)  # Output: 'bash: wrong_command: command not found'
                     # Continue with the error handling
+=======
+            ...     print(cmd_response.out)  # Output: 'bash: wrong_command: command not found'
+            ...     # Continue with the error handling
+>>>>>>> e50b2b7 (docs: update documentation and remove unused code)
 
             3. Dealing with different exit codes:
             >>> cmd_response = py_ssh.run_cmd(cmd='sh /path/to/script.sh', raise_exception=False)
             >>> match cmd_response.ext_code:
+<<<<<<< HEAD
                     case 0:
                         print("The script was executed successfully")
                     case 126:
@@ -155,6 +172,31 @@ class BaseSSH:
                     cmd_response = py_ssh.run_cmd(cmd='command_with_no_output', err_message='The command failed')
                 except CmdError as e:
                     print(e)  # Output: 'The command failed'
+=======
+            ...     case 0:
+            ...         print("The script was executed successfully")
+            ...     case 126:
+            ...         print("The script was not executable")
+            ...     case 127:
+            ...         print("The script was not found")
+            ...     case _:
+            ...         print(f"An unknown error occurred with exit code {cmd_response.exit_code}")
+
+            4. Defining a custom exception:
+            >>> class CustomError(Exception):
+            ...     pass
+            >>> try:
+            ...     cmd_response = py_ssh.run_cmd(cmd='wrong_command', custom_exception=CustomError)
+            ... except Exception as e:
+            ...     # Print the custom error type
+            ...     print(type(e))  # Output: <class '__main__.CustomError'>
+
+            5. Using a custom error message:
+            >>> try:
+            ...     cmd_response = py_ssh.run_cmd(cmd='command_with_no_output', err_message='The command failed')
+            ... except CmdError as e:
+            ...     print(e)  # Output: 'The command failed'
+>>>>>>> e50b2b7 (docs: update documentation and remove unused code)
         """
         cmd = cmd.replace("\n", "").replace("\r", "")  # Remove new lines
         if user:
