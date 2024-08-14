@@ -5,8 +5,6 @@
 
 # PySecureShellAutomator: A Comprehensive SSH Management Library in Python
 
-
-
 PySecureShellAutomator is a robust and versatile Python library that simplifies the process of managing remote Unix hosts via SSH. It's built on top of the powerful Paramiko library, but provides a more user-friendly, high-level interface for executing commands and transferring files over SSH.
 
 This library is designed with flexibility in mind, catering to a wide range of use cases. Whether you're automating server tasks, deploying applications, managing cloud infrastructure, or developing software that requires remote execution, PySecureShellAutomator is equipped to handle your needs.
@@ -27,42 +25,9 @@ Whether you're developing a deployment script, automating system administration 
 
 ## Contents
 
-- [Key Features](#key-features)
 - [Installation](#installation)
+- [Key Features](#key-features)
 - [Usage](#usage)
-
-## Key Features
-
-- [PySecureShellAutomator: A Comprehensive SSH Management Library in Python](#pysecureshellautomator-a-comprehensive-ssh-management-library-in-python)
-  - [Contents](#contents)
-  - [Key Features](#key-features)
-  - [Installation](#installation)
-  - [Usage](#usage)
-  - [Establishing a Connection](#establishing-a-connection)
-    - [Password-based Authentication](#password-based-authentication)
-    - [Key-based Authentication](#key-based-authentication)
-    - [File Operations](#file-operations)
-      - [Copy a File to the Remote Host](#copy-a-file-to-the-remote-host)
-      - [Copy a File from the Remote Host](#copy-a-file-from-the-remote-host)
-      - [Get Content of a File](#get-content-of-a-file)
-      - [Create a Directory](#create-a-directory)
-      - [Get Scructure of a Directory](#get-scructure-of-a-directory)
-      - [Remove a File](#remove-a-file)
-      - [Remove Directory](#remove-directory)
-    - [Processes Operations](#processes-operations)
-      - [Get the status of a single process](#get-the-status-of-a-single-process)
-      - [Get All Running Processes](#get-all-running-processes)
-      - [Kill a Process](#kill-a-process)
-    - [User Operations](#user-operations)
-      - [Create a User](#create-a-user)
-      - [Delete a User](#delete-a-user)
-    - [System Information Retrieval](#system-information-retrieval)
-      - [CPU Usage](#cpu-usage)
-      - [Memory Usage](#memory-usage)
-      - [Disk Usage](#disk-usage)
-      - [Kernel Version](#kernel-version)
-      - [OS Version](#os-version)
-    - [Executing Commands with `run_cmd`](#executing-commands-with-run_cmd)
 
 ## Installation
 
@@ -72,6 +37,40 @@ You can install PySecureShellAutomator with pip:
 pip install py_secure_shell_automator
 ```
 
+## Key Features
+
+- [PySecureShellAutomator: A Comprehensive SSH Management Library in Python](#pysecureshellautomator-a-comprehensive-ssh-management-library-in-python)
+  - [Contents](#contents)
+  - [Installation](#installation)
+  - [Key Features](#key-features)
+  - [Usage](#usage)
+    - [Key-based Authentication](#key-based-authentication)
+    - [Attributes](#attributes)
+    - [Custom Commands](#custom-commands)
+      - [**run\_cmd**](#run_cmd)
+    - [Process Operations](#process-operations)
+      - [**get\_single\_process\_status**](#get_single_process_status)
+      - [**kill\_process**](#kill_process)
+      - [**get\_all\_running\_processes**](#get_all_running_processes)
+    - [File Operations](#file-operations)
+      - [**copy\_file\_to\_remote**](#copy_file_to_remote)
+      - [**copy\_file\_from\_remote**](#copy_file_from_remote)
+      - [**get\_file\_content**](#get_file_content)
+      - [**remove\_file**](#remove_file)
+      - [**remove\_directory**](#remove_directory)
+      - [**create\_directory**](#create_directory)
+      - [**get\_directory\_structure**](#get_directory_structure)
+        - [**change\_owner**](#change_owner)
+    - [User Operations](#user-operations)
+      - [**create\_user**](#create_user)
+      - [**delete\_user**](#delete_user)
+    - [System Information](#system-information)
+      - [**get\_cpu\_usage**](#get_cpu_usage)
+      - [**get\_memory\_usage**](#get_memory_usage)
+      - [**get\_disk\_usage**](#get_disk_usage)
+      - [**get\_kernel\_version**](#get_kernel_version)
+      - [**get\_os\_version**](#get_os_version)
+
 ## Usage
 
 PySecureShellAutomator is designed to be easy to use. Here's an example of how to connect to a remote host and execute a command:
@@ -79,258 +78,606 @@ PySecureShellAutomator is designed to be easy to use. Here's an example of how t
 ```python
 from py_secure_shell_automator import PySecureShellAutomator
 
-# Create a PySecureShellAutomator instance
-ssh = PySecureShellAutomator(host='hostname', username='username', password='password')
+py_ssh = PySecureShellAutomator(host='hostname', username='username', password='password')
 
-# Use the PySecureShellAutomator instance to perform operations
-processes = ssh.get_all_running_processes()
-
-for process in processes:
-    print(f"User: {process.user}, PID: {process.pid}, CPU: {process.cpu}, MEM: {process.mem}, Command: {process.command}")
-
-    >>>User: root, PID: 1, CPU: 0.1, MEM: 1.4, Command: /sbin/init
-    User: daemon, PID: 2, CPU: 0.0, MEM: 0.1, Command: /usr/sbin/atd -f
-    User: root, PID: 3, CPU: 0.2, MEM: 0.8, Command: /usr/sbin/cron -f
-    User: root, PID: 4, CPU: 0.5, MEM: 2.6, Command: /usr/sbin/rsyslogd -n
-    User: syslog, PID: 5, CPU: 0.0, MEM: 0.3, Command: /usr/sbin/rsyslogd -n
-    User: root, PID: 10, CPU: 0.3, MEM: 1.4, Command: /sbin/dhclient -1 -v -pf /run/dhclient.eth0.pid -lf /var/lib/dhcp/dhclient.eth0.leases eth0
-    User: root, PID: 11, CPU: 0.0, MEM: 0.1, Command: /sbin/agetty --noclear tty1 linux
-    User: root, PID: 12, CPU: 0.0, MEM: 0.1, Command: /sbin/agetty --keep-baud 115200 38400 9600 ttyS0 vt220
-    User: root, PID: 13, CPU: 0.4, MEM: 2.2, Command: /usr/lib/postfix/sbin/master -w
-    User: www-data, PID: 14, CPU: 2.0, MEM: 4.0, Command: /usr/sbin/apache2 -k start
+cmd_response = py_ssh.run_cmd(cmd='whoami')
+print(cmd_response.ext_code) # Output: 0
+print(cmd_response.out) # Output: 'username'
+print(cmd_response.is_successful) # Output: True
 ```
 
-## Establishing a Connection
-
-PySecureShellAutomator allows you to establish an SSH connection to a remote Linux host using the paramiko library. You can customize the connection using several attributes:
-
-- `host`: The hostname or IP address of the remote host.
-
-- `username`: The username to use for the SSH connection.
-
-- `password`: The password to use for the SSH connection. This is required for password-based authentication.
-
-- `port`: The port to use for the SSH connection. The default is 22.
-
-- `pkey`: The path to the private key file to use for the SSH connection. This is required for key-based authentication.
-
-- `timeout`: The maximum amount of time (in seconds) to wait for the connection to be established. Default is 10 seconds.
-
-- `auth_timeout`: The maximum amount of time (in seconds) to wait for authentication to complete. Default is 10 seconds.
-
-- `auto_add_policy`: If set to True, the host's key will be automatically added to the known hosts file. This is useful if you're connecting to the host for the first time.
-
-- `sftp`: If set to True, the SFTP protocol will be used for the connection. This is useful if you need to transfer files to/from the host.
-
-Here's how you can establish a connection using password-based authentication and key-based authentication:
-
-### Password-based Authentication
+Execute a command as a different user
 
 ```python
-pass_ssh = PySecureShellAutomator(host='hostname', username='username', password='password')
+cmd_response = py_ssh.run_cmd(user='another_user', cmd='whoami')
+print(cmd_response.out) # Output: 'another_user'
+```
+
+Execute a command as root
+
+```python
+cmd_response = py_ssh.run_cmd(user='root', cmd='whoami')
+print(cmd_response.out) # Output: 'root'
 ```
 
 ### Key-based Authentication
 
+To connect to a remote host using key-based authentication, you can specify the path to the private key file when creating the PySecureShellAutomator object:
+
 ```python
-key_ssh = PySecureShellAutomator(host='hostname', username='username', pkey='path_to_key')
+py_ssh = PySecureShellAutomator(host='hostname', username='username', pkey='path_to_key')
 ```
+
+### Attributes
+
+- `host (str)`: Host to connect to the remote host.
+- `username (str)`: Username to connect to the remote host.
+- `password (str, optional)`: Password to connect to the remote host. Defaults to None.
+- `port (int, optional)`: Port to connect to the remote host. Defaults to 22.
+- `pkey (str, optional)`: Private key to connect to the remote host. Defaults to None.
+- `timeout (int, optional)`: Timeout to connect to the remote host. Defaults to 10.
+- `auth_timeout (int, optional)`: Authentication timeout to connect to the remote host. Defaults to 10.
+- `auto_add_policy (bool, optional)`: Whether to add the host to the known hosts. Defaults to True.
+- `sftp (bool, optional)`: Whether to use the SFTP protocol to connect to the remote host. Defaults to False.
 
 Remember to replace 'hostname', 'username', 'password', and 'path_to_key' with your actual host details. Also, ensure that the user has the necessary permissions to establish the SSH connection.
 
+### Custom Commands
+
+You can run any command on the remote host using the `run_cmd` method. The method returns a `CommandResponse` object that contains the output, exit code, and success status of the command.
+
+#### **run_cmd**
+
+Execute a command on the remote host. If the exit code is not 0, raise an exception.
+
+- **Args**
+
+  `cmd (str):` Command to execute on the remote host.
+  `user (str, optional):` User to execute the command. If None, the user is the same as the one used to connect. Defaults to None.
+  `raise_exception (bool, optional):` If True, raise an exception if the exit code is not 0. Defaults to True.
+  `custom_exception (Type[Exception], optional):` Custom exception to raise if the exit code is not 0 and raise_exception is True. Defaults to CmdError.
+  `err_message (str, optional):` Error message to raise if the exit code is not 0 and raise_exception is True. If None, the output of the command is used. Defaults to None.
+  `cmd_timeout (float, optional):` Timeout to execute the command. Defaults to 10 seconds.
+
+- **Returns**
+
+  `CmdResponse`: Object with the output and exit code of the command.
+
+- **Raises**
+
+  `custom_exception`: Raised if the exit code is not 0 and raise_exception is True. If not specified, a `CmdError` exception is raised.
+
+- **Examples**
+
+1. **Using try-except block**
+
+   Basic usage of the `run_cmd` method with error handling, using a try-except block to deal with exceptions.
+
+   ```python
+   from py_secure_shell_automator.exceptions import CmdError
+
+   try:
+       cmd_response = py_ssh.run_cmd(cmd='wrong_command')
+   except CmdError as e:
+       print(e)  # Output: 'bash: wrong_command: command not found'
+   # Continue with the error handling
+   ```
+
+2. **Using `raise_exception=False`**
+
+   Use the `raise_exception=False`parameter to prevent the method from raising an exception when the exit code is not 0. You can then check the`is_success`attribute of the`CmdResponse` object to determine if the command was successful.
+
+   ```python
+   cmd_response = py_ssh.run_cmd(cmd='wrong_command', raise_exception=False)
+   if not cmd_response.is_succ ess:
+           print(cmd_response.out)  # Output: 'bash: wrong_command: command not found'
+           # Continue with the error handling
+   ```
+
+3. **Dealing with different exit codes**
+
+   You can check the exit code of the command response to determine the outcome of the command execution,
+   handling different exit codes accordingly, for a more granular error handling approach.
+
+   ```python
+   cmd_response = py_ssh.run_cmd(cmd='sh /path/to/script.sh', raise_exception=False)
+   match cmd_response.ext_code:
+       case 0:
+           print("The script was executed successfully")
+       case 126:
+           print("The script was not executable")
+       case 127:
+           print("The script was not found")
+       case _:
+           print(f"An unknown error occurred with exit code {cmd_response.exit_code}")
+   ```
+
+4. **Defining a custom exception:**
+
+   Create a custom exception class that inherits from `Exception` to handle specific types of errors.
+
+   ```python
+
+   class CustomError(Exception):
+       pass
+   try:
+       cmd_response = py_ssh.run_cmd(cmd='wrong_command', custom_exception=CustomError)
+   except Exception as e: # Print the custom error type
+       print(type(e)) # Output: <class '**main**.CustomError'>
+   ```
+
+5. **Using a custom error message**
+
+   Use the `err_message` parameter to specify a custom error message to raise when the exit code is not 0, and the `raise_exception` parameter is set to True.
+   This is useful when you want to provide a more descriptive error message to the user, and the command output alone is not sufficient or does not have an error message.
+
+   ```python
+   try:
+       cmd_response = py_ssh.run_cmd(cmd='command_with_no_output', err_message='The command failed')
+   except CmdError as e:
+       print(e) # Output: 'The command failed'
+   ```
+
+### Process Operations
+
+Perform operations related to processes on the remote host, such as getting the status of a process, killing a process, and listing all running processes.
+
+#### **get_single_process_status**
+
+Get the status of all processes with a given name on the remote host.
+
+- **Args**
+
+  `process (str)`: Name of the process to check.
+  `run_as_root (bool, optional)`: Whether to run the command as root. Default is False.
+
+- **Returns**
+
+  `list[Process]`: A list of Process objects representing the running processes, containing the user, pid, cpu, mem, and command.
+
+- **Raises**
+
+  `GetProcessStatusError`: If there is an error while getting the process status.
+
+- **Examples**
+
+  ```python
+  processes = py_ssh.get_single_process_status('nginx')
+  for process in processes:
+      print(process)
+  ```
+
+#### **kill_process**
+
+Kill a process on the remote host.
+
+- **Args**
+
+  `process (str)`: Name of the process to kill.
+  `run_as_root (bool, optional)`: Whether to run the command as root. Default is False.
+
+- **Raises**
+
+  `KillProcessError`: If there is an error while killing the process.
+
+- **Examples**
+
+  ```python
+  py_ssh.kill_process('nginx')
+  ```
+
+#### **get_all_running_processes**
+
+Get all running processes on the remote host.
+
+- **Args**
+
+  `run_as_root (bool, optional)`: Whether to run the command as root. Default is False.
+
+- **Returns**
+
+  `list[Process]`: List of Process objects representing the running processes, containing the user, pid, cpu, mem, and command.
+
+- **Raises**
+
+  `GetProcessesStatusError`: If there is an error while getting the process status.
+
+- **Examples**
+
+  ```python
+  processes = py_ssh.get_all_running_processes()
+  for process in processes:
+      print(process)
+  ```
+
 ### File Operations
 
-PySecureShellAutomator provides methods for performing various file operations on the remote host.
+Perform files operations on the remote host, such as copying files, reading file content, removing files, and creating directories.
 
-Observation: TO use `sftp` operations, set `sftp=True` when creating the PySecureShellAutomator instance.
+#### **copy_file_to_remote**
 
-Methods that use `sftp`:
+Copies a file from the local machine to the remote host. `SFTP` must be initialized.
+The `local_path` and `remote_path` should be absolute paths, including the filename.
+If the file already exists at the `remote_path`, it will be overwritten.
 
-- copy_file_to_remote
-- copy_file_from_remote
+- **Args**
 
-Here is an example of how to create a PySecureShellAutomator instance with `sftp` operations:
+  `local_path (str)`: Absolute path to the file on the local machine.
+  `remote_path (str)`: Absolute path where the file should be copied to on the remote host.
+
+- **Raises**
+
+  `SFTPNotInitializedError`: If SFTP is not initialized.
+  `FileTransferError`: If there is an error copying the file to the remote host.
+
+- **Examples**
+
+  ```python
+  py_ssh = PySecureShellAutomator(host='hostname', username='username', password='password', sftp=True)
+  py_ssh.copy_file_to_remote('/absolute/path/to/local/file.txt', '/absolute/path/to/remote/file.txt')
+  ```
+
+#### **copy_file_from_remote**
+
+Copies a file from the remote host to the local machine. SFTP must be initialized.
+The `remote_path` and `local_path` should be absolute paths, including the filename.
+If the file already exists at the `local_path`, it will be overwritten.
+
+- **Args**
+
+  `remote_path (str)`: Absolute path to the file on the remote host.
+  `local_path (str)`: Absolute path where the file should be copied to on the local machine.
+
+- **Raises**
+
+  `SFTPNotInitializedError`: If SFTP is not initialized.
+  `FileTransferError`: If there is an error copying the file from the remote host.
+
+- **Examples**
+
+  ```python
+  py_ssh = PySecureShellAutomator(host='hostname', username='username', password='password', sftp=True)
+  py_ssh.copy_file_from_remote('/absolute/path/to/remote/file.txt', '/absolute/path/to/local/file.txt')
+  ```
+
+#### **get_file_content**
+
+Gets the content of a file as a string.
+
+- **Args**
+
+  `filepath (str)`: Path to the file to read.
+  `run_as_root (bool, optional)`: Whether to run the command as root. Defaults to False.
+
+- **Returns**
+
+  `str`: Content of the file as a string.
+
+- **Raises**
+
+  `GetFileContentError`: If there is an error getting the file content.
+
+- **Examples**
+
+  ```python
+  content = py_ssh.get_file_content('/path/to/file.txt')
+  print(content) # Output: 'File content'
+  ```
+
+#### **remove_file**
+
+Remove a file in the remote host.
+
+- **Args**
+
+  `filepath (str)`: Path to the file to remove.
+  `force (bool, optional)`: If True, remove the file even if it's write-protected. Defaults to False.
+  `run_as_root (bool, optional)`: Whether to run the command as root. Defaults to False.
+
+- **Raises**
+
+  `FileRemovalError`: If there is an error removing the file.
+
+- **Examples**
+
+1. **Remove a file normally**
+
+   ```python
+   py_ssh.remove_file('/path/to/file.txt')
+   ```
+
+2. **Force remove a write-protected file**
+
+   ```python
+   py_ssh.remove_file('/path/to/protected_file.txt', force=True)
+   ```
+
+#### **remove_directory**
+
+Remove a directory.
+
+- **Args**
+
+  `dirpath (str)`: The path to the directory to remove.
+  `force (bool, optional)`: If True, remove the directory even if it's not empty. Defaults to False.
+  `run_as_root (bool, optional)`: Whether to run the command as root. Defaults to False.
+
+- **Raises**
+
+  `DirectoryRemovalError`: If there is an error removing the directory.
+
+- **Examples**
+
+1. **Remove an empty directory**
+
+   ```python
+   py_ssh.remove_directory('/path/to/empty_directory')
+   ```
+
+2. **Force remove a non-empty directory**
+
+   ```python
+   py_ssh.remove_directory('/path/to/non_empty_directory', force=True)
+   ```
+
+3. **Remove a directory as root**
+
+   ```python
+   py_ssh.remove_directory('/path/to/directory', run_as_root=True)
+   ```
+
+4. **Force remove a non-empty directory as root**
+
+   ```python
+   py_ssh.remove_directory('/path/to/non_empty_directory', force=True, run_as_root=True)
+   ```
+
+#### **create_directory**
+
+Create a directory. If the directory already exists, the command will not fail.
+
+- **Args**
+
+  `dirpath (str)`: The path to the directory to create.
+  `run_as_root (bool, optional)`: Whether to run the command as root. Defaults to False.
+
+- **Raises**
+
+  `DirectoryCreationError`: If there is an error creating the directory.
+
+- **Examples**
+
+1. **Create a directory normally**
+
+   ```python
+   py_ssh.create_directory('/path/to/new_directory')
+   ```
+
+2. **Create a directory as root**
+
+   ```python
+    py_ssh.create_directory('/path/to/new_directory', run_as_root=True)
+   ```
+
+#### **get_directory_structure**
+
+List the content of a directory on the remote server.
+Ensure that the user has the necessary permissions to list the directory content at the specified path.
+
+- **Args**
+
+  `path (str)`: The path to the directory to list. This should be an absolute path.
+  `run_as_root (bool, optional)`: Whether to run the command with root user privileges. Defaults to False.
+
+- **Returns**
+
+  `list[Directory]`: A list of Directory objects representing each directory and its files.
+
+- **Raises**
+
+  `ListDirectoryContentError`: If the command fails to list the directory content.
+
+- **Examples**
+
+  ```python
+  dir_structure = py_ssh.get_directory_structure('/path/to/directory')
+  for directory in dir_structure:
+      print(f"Directory: {directory.dir}")
+      print("Files:")
+      for file in directory.files:
+          print(f"{file}")
+  ```
+
+##### **change_owner**
+
+Change the owner of a file or directory.
+
+- **Args**
+
+  `path (str)`: The path to the file or directory.
+  `owner (str)`: The new owner.
+  `recursive (bool, optional)`: If True, change the owner recursively. Defaults to False.
+  `run_as_root (bool, optional)`: Whether to run the command as root. Defaults to False.
+
+- **Raises**
+
+  `OwnerChangeError`: If there is an error changing the owner.
+
+- **Examples**
+
+1. **Change the owner of a file:**
 
 ```python
-# Create an instance of SSHFileOperations
-ssh_file_ops = PySecureShellAutomator(host='hostname', username='username', password='password', sftp=True)
+py_ssh.change_owner('/path/to/file', 'new_owner')
 ```
 
-The other methods you are free to use without `sftp` set to `True`.
-In the following examples, we will use the `ssh_file_ops` instance to perform file operations, for convenience, but again, you can use any instance of PySecureShellAutomator.
-
-#### Copy a File to the Remote Host
+2. **Change the owner of a directory:**
 
 ```python
-ssh_file_ops.copy_file_to_remote('local_path', 'remote_path')
+  py_ssh.change_owner('/path/to/directory', 'new_owner')
 ```
 
-#### Copy a File from the Remote Host
+3. **Change the owner of a directory and its contents recursively:**
 
 ```python
-ssh_file_ops.copy_file_from_remote('local_path', 'remote_path')
-```
-
-#### Get Content of a File
-
-```python
-ssh_file_ops.get_file_content('remote_path')
-```
-
-#### Create a Directory
-
-```python
-ssh_file_ops.create_directory('remote_path')
-```
-
-#### Get Scructure of a Directory
-
-```python
-structure = ssh_file_ops.get_directory_structure('path')
-for directory in structure:
-    print(f"Directory: {directory.dir}")
-    print("Files:")
-    for file in directory.files:
-        print(file)
-```
-
-#### Remove a File
-
-```python
-ssh.remove_file('remote_file_path')
-```
-
-#### Remove Directory
-
-```python
-ssh.remove_directory('remote_path', recursive=False) # recursive=True to remove recursively, default is False
-```
-
-### Processes Operations
-
-PySecureShellAutomator provides methods for performing various processes operations on the remote host. Here are some examples of how to use these methods:
-
-#### Get the status of a single process
-
-```python
-processes = ssh.get_single_process_status('process_name')
-for process in processes:
-    print(f"User: {process.user}, PID: {process.pid}, CPU: {process.cpu}, MEM: {process.mem}, Command: {process.command}")
-```
-
-#### Get All Running Processes
-
-```python
-processes = ssh.get_all_running_processes()
-for process in processes:
-    print(f"User: {process.user}, PID: {process.pid}, CPU: {process.cpu}, MEM: {process.mem}, Command: {process.command}")
-```
-
-#### Kill a Process
-
-```python
-ssh.kill_process('process_name', run_as_root=False) # If necessary, set run_as_root=True to run as root, default is False
+  py_ssh.change_owner('/path/to/directory', 'new_owner', recursive=True)
 ```
 
 ### User Operations
 
-Manage user accounts on the remote host, including creating, modifying, and deleting users.
+Perform operations related to users on the remote host, such as creating and deleting users.
 
-#### Create a User
+#### **create_user**
 
-```python
-ssh.create_user('username', 'password', run_as_root=True) # By default, the command is executed as root. If necessary, set run_as_root=False to run as a non-root user.
-```
+Create a new user on the remote host.
 
-#### Delete a User
+- **Args**
 
-```python
-ssh.delete_user('username', run_as_root=True) # By default, the command is executed as root. If necessary, set run_as_root=False to run as a non-root user.
-```
+  `username (str)`: The username of the new user.
+  `password (str)`: The password of the new user.
+  `run_as_root (bool)`: Whether to run the command as root. Default is True.
 
-### System Information Retrieval
+- **Raises**
 
-Retrieve comprehensive system information from the remote host, CPU usage, memory usage, and disk usage.
+  `UserCreationError`: If there is an error creating the user.
 
-Observation: The following methods are not executed as root by default. If necessary, set run_as_root=True to run as root.
+- **Examples**
 
-#### CPU Usage
+  ```python
+  py_ssh.create_user(username='newuser', password='newpassword')
+  ```
 
-```python
-cpu_usage = ssh.get_cpu_usage()
-print(f"CPU Usage: {cpu_usage}")
-```
+#### **delete_user**
 
-#### Memory Usage
+Delete a user on the remote host.
 
-```python
-mem_usage = ssh.get_memory_usage()
-print(f"Memory Usage: {mem_usage}")
-```
+- **Args**
 
-#### Disk Usage
+  `username (str)`: The username of the user to delete.
+  `run_as_root (bool)`: Whether to run the command as root. Default is True.
 
-```python
-disk_usage = ssh.get_disk_usage()
-print(f"Disk Usage: {disk_usage}")
-```
+- **Raises**
 
-#### Kernel Version
+  `UserDeletionError`: If there is an error deleting the user.
 
-```python
-kernel_version = ssh.get_kernel_version()
-print(f"Kernel version: {kernel_version}")
-```
+- **Examples**
 
-#### OS Version
+  ```python
+  py_ssh.delete_user(username='olduser')
+  ```
 
-```python
-os_version = ssh.get_os_version()
-print(f"OS: {ssh.os_version}")
-```
+### System Information
 
-### Executing Commands with `run_cmd`
+Collect system information from the remote host, such as CPU usage, memory usage, disk usage, kernel version, and operating system version.
 
-The `run_cmd` method is a powerful tool in PySecureShellAutomator that allows you to execute any command on the remote host. This method provides a high level of flexibility and control, with several parameters to customize the command execution:
+#### **get_cpu_usage**
 
-- `cmd`: This is the command you want to execute on the remote host. It can be any command that the remote system recognizes.
+Get the CPU usage of the remote host.
 
-- `user`: This parameter allows you to specify the user that will execute the command. If not provided, the command will be executed with the same user that was used to establish the SSH connection.
+- **Args**
 
-- `raise_exception`: If set to True, the method will raise an exception if the command's exit code is not 0, i.e., if the command fails. This is useful if you want to ensure that the command was executed successfully.
+  `run_as_root (bool)`: Whether to run the command as root. Default is False.
 
-- `custom_exception`: This parameter allows you to specify a custom exception that will be raised if the command fails and `raise_exception` is set to True. This can be useful for handling specific types of errors.
+- **Returns**
 
-- `err_message`: This is the error message that will be used if an exception is raised. If not provided, the output of the command will be used as the error message.
+  `str`: CPU usage.
 
-- `cmd_timeout`: This parameter allows you to specify a timeout for the command execution. If the command does not complete within this time, it will be terminated. Default is 10 seconds.
+- **Raises**
 
-The `run_cmd` method returns a `CmdResponse` object, which contains the output of the command and its exit code. You can use this object to check the result of the command and handle it in your code.
+  `GetSystemInfoError`: If there is an error retrieving the CPU usage.
 
-Here's an example of how to use the `run_cmd` method:
+- **Examples**
 
-```python
-from py_secure_shell_automator import PySecureShellAutomator
+  ```python
+  print(cpu_usage) # Output: '10.0%'
+  ```
 
-# Create a PySecureShellAutomator instance
-ssh = PySecureShellAutomator(host='hostname', username='username', password='password')
+#### **get_memory_usage**
 
-# Create a custom command
-command = 'uptime'
+Get the memory usage of the remote host.
 
-# Execute the custom command
-output = ssh.run_cmd(command)
+- **Args**
 
-# Print the output
-print(output.out)
-# 16:38:59 up  1:02,  1 user,  load average: 0.00, 0.00, 0.00
+  `run_as_root (bool)`: Whether to run the command as root. Default is False.
 
-# Print exit code
-print(output.ext_code)
-# 0
+- **Returns**
 
-# Check if the command was successful
-print(output.is_successful)
-# True
-```
+  `str`: Memory usage.
 
+- **Raises**
+
+  `GetSystemInfoError`: If there is an error retrieving the memory usage.
+
+- **Examples**
+
+  ```python
+  memory_usage = py_ssh.get_memory_usage()
+  print(memory_usage) # Output: '10/20MB (50%)'
+  ```
+
+#### **get_disk_usage**
+
+Get the disk usage of the remote host.
+
+- **Args**
+
+  `run_as_root (bool)`: Whether to run the command as root. Default is False.
+
+- **Returns**
+
+  `str`: Disk usage.
+
+- **Raises**
+
+  `GetSystemInfoError`: If there is an error retrieving the disk usage.
+
+- **Examples**
+
+  ```python
+  disk_usage = py_ssh.get_disk_usage()
+  print(disk_usage) # Output: '10/20GB (50%)'
+  ```
+
+#### **get_kernel_version**
+
+Get the kernel version of the remote host.
+
+- **Args**
+
+  `run_as_root (bool)`: Whether to run the command as root. Default is False.
+  `str`: Kernel version.
+
+- **Raises**
+
+  `GetSystemInfoError`: If there is an error retrieving the kernel version.
+
+- **Examples**
+
+  ```python
+  kernel_version = py_ssh.get_kernel_version()
+  print(kernel_version)
+  '5.4.0-42-generic'
+  ```
+
+#### **get_os_version**
+
+Get the operating system version of the remote host.
+
+- **Args**
+
+  `run_as_root (bool)`: Whether to run the command as root. Default is False.
+
+- **Returns**
+
+  `str`: Operating system version.
+
+- **Raises**
+
+  `GetSystemInfoError`: If there is an error retrieving the operating system version.
+
+- **Examples**
+
+  ```python
+  os_version = py_ssh.get_os_version()
+  print(os_version) # Output: 'Arch Linux'
+  ```

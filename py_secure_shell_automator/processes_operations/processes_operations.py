@@ -14,29 +14,34 @@ class SSHProcessOperations(BaseSSH):
 
     def get_single_process_status(
         self, process: str, run_as_root: bool = False
-    ) -> list[Process] | None:
+    ) -> list[Process]:
         """
-        Get the status of all process of a given name on the remote host.
+        Get the status of all processes with a given name on the remote host.
 
-        Parameters:
-            process: Name of the process to check
-            run_as_root: Whether to run the command as root. Default is False.
+        Args:
+            process (str): Name of the process to check.
+            run_as_root (bool, optional): Whether to run the command as root. Default is False.
 
         Returns:
-            A list of Process objects representing the informed running processes
+            list[Process]: A list of Process objects representing the running processes, containing the user, pid, cpu, mem, and command.
 
         Raises:
-            GetProcessStatusError: raised if there is an error while getting the process status
+            GetProcessStatusError: If there is an error while getting the process status.
+
+        Examples:
+            >>> processes = py_ssh.get_single_process_status('nginx')
+            >>> if processes:
+            >>>     for process in processes:
+            >>>         print(process)
         """
         cmd = f"ps aux | grep {process} | grep -v grep"
         cmd_response = self.run_cmd(
             user=self._get_user(run_as_root),
             cmd=cmd,
-            raise_exception=False,
             err_message=f"Process {process} not found",
         )
 
-        processes = []
+        processes: list[Process] = []
         for line in cmd_response.out.split("\n"):
             fields = line.split()
             if fields:
@@ -50,18 +55,21 @@ class SSHProcessOperations(BaseSSH):
                     )
                 )
 
-        return processes or None
+        return processes
 
     def kill_process(self, process: str, run_as_root: bool = False) -> None:
         """
         Kill a process on the remote host.
 
-        Parameters:
-            process: Name of the process to kill
-            run_as_root: Whether to run the command as root. Default is False.
+        Args:
+            process (str): Name of the process to kill.
+            run_as_root (bool, optional): Whether to run the command as root. Default is False.
 
         Raises:
-            KillProcessError: raised if there is an error while killing the process
+            KillProcessError: If there is an error while killing the process.
+
+        Examples:
+            >>> py_ssh.kill_process('nginx')
         """
         cmd = f"pkill {process}"
         self.run_cmd(
@@ -75,12 +83,19 @@ class SSHProcessOperations(BaseSSH):
         """
         Get all running processes on the remote host.
 
+        Args:
+            run_as_root (bool, optional): Whether to run the command as root. Default is False.
+
         Returns:
-            list[Process]: List of Process objects representing the running processes
-            run_as_root: Whether to run the command as root. Default is False.
+            list[Process]: List of Process objects representing the running processes, containing the user, pid, cpu, mem, and command.
 
         Raises:
-            GetProcessesStatusError: raised if there is an error while getting the process status
+            GetProcessesStatusError: If there is an error while getting the process status.
+
+        Examples:
+            >>> processes = py_ssh.get_all_running_processes()
+            >>> for process in processes:
+            >>>     print(process)
         """
         cmd = "ps aux"
         cmd_response = self.run_cmd(

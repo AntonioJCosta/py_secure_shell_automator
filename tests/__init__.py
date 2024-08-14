@@ -17,10 +17,11 @@ PYSECURE_SHELL_AUTOMATOR_PASSWORD = os.getenv(
 
 
 @pytest.fixture
-def ssh() -> PySecureShellAutomator:
+def py_ssh() -> PySecureShellAutomator:
     return PySecureShellAutomator(
         host=PYSECURE_SHELL_AUTOMATOR_HOST,
         username=PYSECURE_SHELL_AUTOMATOR_USERNAME,
         port=PYSECURE_SHELL_AUTOMATOR_PORT,
         password=PYSECURE_SHELL_AUTOMATOR_PASSWORD,
     )
+
