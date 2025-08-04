@@ -156,7 +156,6 @@ class BaseSSH:
                 except CmdError as e:
                     print(e)  # Output: 'The command failed'
         """
-        cmd = cmd.replace("\n", "").replace("\r", "")  # Remove new lines
         if user:
             user = shlex.quote(user)  # Shell-escape the user
             cmd = (
